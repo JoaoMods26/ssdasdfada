@@ -1,1 +1,1062 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Élite Fragrances - Perfumería Exclusiva</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --primary: #d4af37;
+            --secondary: #1a1a1a;
+            --accent: #c9a961;
+            --bg-light: #ffffff;
+            --bg-card-light: #f8f8f8;
+            --text-light: #1a1a1a;
+            --text-secondary-light: #666;
+            --border-light: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --bg-light: #0f0f0f;
+            --bg-card-light: #1a1a1a;
+            --text-light: #ffffff;
+            --text-secondary-light: #b0b0b0;
+            --border-light: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2a2a2a 100%);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: var(--secondary);
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: var(--secondary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            color: var(--secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '✨';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.1;
+            top: -2rem;
+            right: -2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: var(--bg-card-light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .product-image {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+        }
+
+        .product-image img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: var(--secondary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .product-brand {
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .product-description {
+            color: var(--text-secondary-light);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .product-notes {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .product-notes h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .product-notes p {
+            font-size: 0.85rem;
+            color: var(--text-secondary-light);
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stars {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .reviews-count {
+            color: var(--text-secondary-light);
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: var(--secondary);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .reviews-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-light);
+        }
+
+        .review {
+            background: var(--bg-card-light);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .review-author {
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .review-date {
+            color: var(--text-secondary-light);
+            font-size: 0.9rem;
+        }
+
+        .review-text {
+            color: var(--text-secondary-light);
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            background: var(--bg-card-light);
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .sales-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card-light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .sales-table th,
+        .sales-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .sales-table th {
+            background: var(--primary);
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .sales-table tr:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .status-completado {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-pendiente {
+            background: #FF9800;
+            color: white;
+        }
+
+        .status-cancelado {
+            background: #f44336;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card-light);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary-light);
+            font-size: 1rem;
+        }
+
+        .filter-section {
+            background: var(--bg-card-light);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .delete-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #d32f2f;
+        }
+
+        .product-gallery {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid var(--border-light);
+            transition: all 0.3s;
+        }
+
+        .gallery-thumb:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .gallery-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span>✨</span>
+                <span>Élite Fragrances</span>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn" onclick="showSection('tienda')">🏪 Tienda</button>
+                <button class="nav-btn" onclick="showSection('ventas')">📊 Ventas</button>
+                <button class="nav-btn" onclick="showSection('nueva-venta')">➕ Nueva Venta</button>
+                <button class="theme-toggle" onclick="toggleTheme()">🌓 Tema</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- SECCIÓN TIENDA -->
+        <section id="tienda" class="section active">
+            <div class="hero">
+                <h1>Fragancias Exclusivas de Lujo</h1>
+                <p>Descubre nuestra colección premium de perfumes de las mejores marcas del mundo</p>
+            </div>
+
+            <div class="products-grid" id="productsGrid"></div>
+        </section>
+
+        <!-- SECCIÓN REGISTRO DE VENTAS -->
+        <section id="ventas" class="section">
+            <h1 style="margin-bottom: 2rem; color: var(--primary);">📊 Registro de Ventas</h1>
+            
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalVentas">0</div>
+                    <div class="stat-label">Total Ventas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalIngresos">$0</div>
+                    <div class="stat-label">Ingresos Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="ventasHoy">0</div>
+                    <div class="stat-label">Ventas Hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="promedioVenta">$0</div>
+                    <div class="stat-label">Promedio por Venta</div>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="form-group" style="margin: 0; flex: 1;">
+                    <label>Filtrar por Estado</label>
+                    <select id="filterStatus" onchange="filterSales()">
+                        <option value="todos">Todos</option>
+                        <option value="completado">Completado</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="cancelado">Cancelado</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin: 0; flex: 1;">
+                    <label>Buscar</label>
+                    <input type="text" id="searchSales" placeholder="Cliente o producto..." onkeyup="filterSales()">
+                </div>
+            </div>
+
+            <table class="sales-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="salesTableBody"></tbody>
+            </table>
+        </section>
+
+        <!-- SECCIÓN NUEVA VENTA -->
+        <section id="nueva-venta" class="section">
+            <h1 style="margin-bottom: 2rem; color: var(--primary);">🛒 Registrar Nueva Venta</h1>
+            
+            <div style="max-width: 800px; margin: 0 auto; background: var(--bg-card-light); padding: 2rem; border-radius: 15px;">
+                <form id="saleForm">
+                    <div class="form-group">
+                        <label>Cliente *</label>
+                        <input type="text" id="clientName" required placeholder="Nombre completo del cliente">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="clientEmail" placeholder="cliente@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" id="clientPhone" placeholder="+593 999 999 999">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Producto *</label>
+                        <select id="productSelect" required onchange="updatePrice()">
+                            <option value="">Seleccionar producto...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cantidad *</label>
+                        <input type="number" id="quantity" min="1" value="1" required onchange="updateTotal()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Precio Unitario</label>
+                        <input type="number" id="unitPrice" step="0.01" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Total</label>
+                        <input type="number" id="totalPrice" step="0.01" readonly style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select id="saleStatus" required>
+                            <option value="completado">Completado</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notas</label>
+                        <textarea id="saleNotes" placeholder="Información adicional sobre la venta..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">💎 Registrar Venta</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const products = [
+            {
+                id: 1,
+                name: "Noir Extreme",
+                brand: "Tom Ford",
+                price: 189.99,
+                description: "Una fragancia oriental amaderada intensa con notas de cardamomo, nuez moscada y ámbar.",
+                notes: {
+                    top: "Cardamomo, Nuez Moscada, Mandarina",
+                    heart: "Rosa, Jazmín, Geranio",
+                    base: "Ámbar, Vainilla, Madera de Sándalo"
+                },
+                rating: 4.8,
+                reviews: 234,
+                badge: "Best Seller",
+                image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&q=80"
+            },
+            {
+                id: 2,
+                name: "Sauvage",
+                brand: "Dior",
+                price: 145.00,
+                description: "Frescura radical con notas de bergamota de Calabria, pimienta de Sichuan y lavanda.",
+                notes: {
+                    top: "Bergamota, Pimienta",
+                    heart: "Lavanda, Pimienta Rosa, Vetiver",
+                    base: "Cedro, Labandum, Ambroxan"
+                },
+                rating: 4.9,
+                reviews: 512,
+                badge: "Nuevo",
+                image: "https://images.unsplash.com/photo-1588405748880-12d1d2a59d75?w=400&q=80"
+            },
+            {
+                id: 3,
+                name: "Aventus",
+                brand: "Creed",
+                price: 435.00,
+                description: "Icónico aroma frutal con piña, manzana, bergamota y vainilla sobre una base ahumada.",
+                notes: {
+                    top: "Piña, Manzana, Bergamota, Grosella Negra",
+                    heart: "Abedul, Pachulí, Rosa Marroquí, Jazmín",
+                    base: "Almizcle, Musgo de Roble, Ambergris, Vainilla"
+                },
+                rating: 4.7,
+                reviews: 892,
+                badge: "Exclusivo",
+                image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=80"
+            },
+            {
+                id: 4,
+                name: "Bleu de Chanel",
+                brand: "Chanel",
+                price: 165.00,
+                description: "Elegancia aromática con cítricos, cedro y sándalo. Fresco y sofisticado.",
+                notes: {
+                    top: "Limón, Menta, Pomelo Rosa, Naranja",
+                    heart: "Jengibre, Nuez Moscada, Jazmín",
+                    base: "Incienso, Vetiver, Cedro, Sándalo"
+                },
+                rating: 4.6,
+                reviews: 678,
+                badge: "Premium",
+                image: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=400&q=80"
+            },
+            {
+                id: 5,
+                name: "One Million",
+                brand: "Paco Rabanne",
+                price: 98.00,
+                description: "Audaz y seductor con notas de pomelo, menta, canela y cuero.",
+                notes: {
+                    top: "Pomelo, Menta, Naranja Sanguina",
+                    heart: "Rosa, Canela, Especias",
+                    base: "Cuero, Madera Blanca, Ámbar, Pachulí"
+                },
+                rating: 4.5,
+                reviews: 445,
+                badge: "Popular",
+                image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&q=80"
+            },
+            {
+                id: 6,
+                name: "La Vie Est Belle",
+                brand: "Lancôme",
+                price: 135.00,
+                description: "Gourmand floral con iris, pachulí y vainilla. Dulce y elegante.",
+                notes: {
+                    top: "Grosella Negra, Pera",
+                    heart: "Iris, Jazmín, Flor de Azahar",
+                    base: "Praliné, Vainilla, Pachulí, Tonka"
+                },
+                rating: 4.8,
+                reviews: 723,
+                badge: "Femenino",
+                image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400&q=80"
+            },
+            {
+                id: 7,
+                name: "Oud Wood",
+                brand: "Tom Ford",
+                price: 310.00,
+                description: "Oud raro mezclado con sándalo exótico y vetiver ahumado.",
+                notes: {
+                    top: "Cardamomo Rosado, Pimienta China",
+                    heart: "Oud, Sándalo, Vetiver",
+                    base: "Ámbar, Tonka Bean"
+                },
+                rating: 4.9,
+                reviews: 356,
+                badge: "Luxury",
+                image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=400&q=80"
+            },
+            {
+                id: 8,
+                name: "Good Girl",
+                brand: "Carolina Herrera",
+                price: 125.00,
+                description: "Contraste de tonalidades luminosas y oscuras con jazmín, cacao y almendra.",
+                notes: {
+                    top: "Almendra, Café",
+                    heart: "Jazmín Sambac, Tuberosa, Iris",
+                    base: "Tonka, Cacao, Vainilla, Praliné, Sándalo"
+                },
+                rating: 4.7,
+                reviews: 589,
+                badge: "Trending",
+                image: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&q=80"
+            }
+        ];
+
+        let sales = [];
+        let currentTheme = 'light';
+        let nextSaleId = 1;
+
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionName).classList.add('active');
+            
+            if (sectionName === 'ventas') {
+                renderSales();
+                updateStats();
+            }
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x300/d4af37/1a1a1a?text=${encodeURIComponent(product.brand)}'">
+                        <div class="product-badge">${product.badge}</div>
+                    </div>
+                    <div class="product-brand">${product.brand}</div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="rating">
+                        <span class="stars">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5-Math.floor(product.rating))}</span>
+                        <span class="reviews-count">(${product.reviews} reseñas)</span>
+                    </div>
+                    <div class="product-description">${product.description}</div>
+                    
+                    <div class="product-notes">
+                        <h4>🌸 Pirámide Olfativa</h4>
+                        <p><strong>Salida:</strong> ${product.notes.top}</p>
+                        <p><strong>Corazón:</strong> ${product.notes.heart}</p>
+                        <p><strong>Fondo:</strong> ${product.notes.base}</p>
+                    </div>
+                    
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <button class="btn" onclick="quickSale(${product.id})">🛍️ Comprar Ahora</button>
+                    
+                    <div class="reviews-section">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary);">💬 Reseñas de Clientes</h3>
+                        ${generateReviews(product.id)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateReviews(productId) {
+            const reviewsData = {
+                1: [
+                    { author: "Carlos M.", rating: 5, date: "15/10/2024", text: "Increíble fragancia, dura todo el día. Muy recomendado para ocasiones especiales." },
+                    { author: "Ana L.", rating: 5, date: "22/10/2024", text: "Mi perfume favorito, recibo cumplidos constantemente. Vale cada centavo." },
+                    { author: "Pedro R.", rating: 4, date: "28/10/2024", text: "Excelente calidad, aunque el precio es elevado. La proyección es impresionante." }
+                ],
+                2: [
+                    { author: "Miguel R.", rating: 5, date: "18/10/2024", text: "Fresco y masculino. Perfecto para cualquier ocasión, oficina o salidas." },
+                    { author: "Laura S.", rating: 4, date: "25/10/2024", text: "Excelente duración y proyección. Vale cada centavo invertido." },
+                    { author: "Juan P.", rating: 5, date: "02/11/2024", text: "El mejor perfume que he comprado. Versátil y muy elegante." }
+                ],
+                3: [
+                    { author: "Roberto P.", rating: 5, date: "12/10/2024", text: "El rey de los perfumes. Único e inigualable. Una obra maestra." },
+                    { author: "Sofia G.", rating: 5, date: "20/10/2024", text: "Caro pero lo vale totalmente. Calidad suprema en cada aspecto." },
+                    { author: "Diego M.", rating: 5, date: "30/10/2024", text: "Aventus es sinónimo de éxito. La mejor inversión en fragancias." }
+                ],
+                4: [
+                    { author: "David K.", rating: 5, date: "14/10/2024", text: "Elegante y versátil. Perfecto para la oficina y eventos formales." },
+                    { author: "María F.", rating: 4, date: "28/10/2024", text: "Clásico atemporal. Nunca falla y siempre recibo cumplidos." },
+                    { author: "Andrés T.", rating: 5, date: "05/11/2024", text: "Chanel nunca decepciona. Calidad premium garantizada." }
+                ],
+                5: [
+                    { author: "Jorge H.", rating: 4, date: "16/10/2024", text: "Llamativo y duradero. Ideal para salir de noche y ocasiones especiales." },
+                    { author: "Patricia V.", rating: 5, date: "23/10/2024", text: "A mi esposo le encanta. Muy masculino y atractivo." },
+                    { author: "Luis C.", rating: 4, date: "01/11/2024", text: "Excelente relación calidad-precio. Muy recomendado." }
+                ],
+                6: [
+                    { author: "Isabella T.", rating: 5, date: "19/10/2024", text: "Dulce pero no empalagoso. Perfecto para el día a día." },
+                    { author: "Carmen D.", rating: 5, date: "26/10/2024", text: "Mi firma olfativa. Recibo cumplidos siempre que lo uso." },
+                    { author: "Gabriela S.", rating: 5, date: "03/11/2024", text: "Elegante y sofisticado. Me hace sentir especial cada día." }
+                ],
+                7: [
+                    { author: "Antonio M.", rating: 5, date: "13/10/2024", text: "Oud de altísima calidad. Sofisticado y único." },
+                    { author: "Valentina R.", rating: 4, date: "21/10/2024", text: "Intenso y duradero. Para verdaderos conocedores de fragancias." },
+                    { author: "Ricardo F.", rating: 5, date: "29/10/2024", text: "Tom Ford no defrauda. Una joya olfativa incomparable." }
+                ],
+                8: [
+                    { author: "Fernanda L.", rating: 5, date: "17/10/2024", text: "Sexy y elegante. Me hace sentir poderosa y especial." },
+                    { author: "Daniela C.", rating: 5, date: "24/10/2024", text: "El mejor perfume que he tenido. Único y memorable." },
+                    { author: "Camila V.", rating: 4, date: "04/11/2024", text: "Dulce y sofisticado. Perfecto para cualquier ocasión." }
+                ]
+            };
+
+            const reviews = reviewsData[productId] || [];
+            return reviews.map(review => `
+                <div class="review">
+                    <div class="review-header">
+                        <span class="review-author">⭐ ${review.author}</span>
+                        <span class="review-date">${review.date}</span>
+                    </div>
+                    <div class="rating">
+                        <span class="stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</span>
+                    </div>
+                    <div class="review-text">${review.text}</div>
+                </div>
+            `).join('');
+        }
+
+        function populateProductSelect() {
+            const select = document.getElementById('productSelect');
+            select.innerHTML = '<option value="">Seleccionar producto...</option>' + 
+                products.map(p => `<option value="${p.id}">${p.brand} - ${p.name} (${p.price})</option>`).join('');
+        }
+
+        function updatePrice() {
+            const select = document.getElementById('productSelect');
+            const productId = parseInt(select.value);
+            const product = products.find(p => p.id === productId);
+            
+            if (product) {
+                document.getElementById('unitPrice').value = product.price.toFixed(2);
+                updateTotal();
+            }
+        }
+
+        function updateTotal() {
+            const quantity = parseInt(document.getElementById('quantity').value) || 0;
+            const unitPrice = parseFloat(document.getElementById('unitPrice').value) || 0;
+            const total = quantity * unitPrice;
+            document.getElementById('totalPrice').value = total.toFixed(2);
+        }
+
+        function quickSale(productId) {
+            showSection('nueva-venta');
+            document.getElementById('productSelect').value = productId;
+            updatePrice();
+        }
+
+        document.getElementById('saleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const productId = parseInt(document.getElementById('productSelect').value);
+            const product = products.find(p => p.id === productId);
+            
+            const sale = {
+                id: nextSaleId++,
+                date: new Date().toISOString(),
+                client: {
+                    name: document.getElementById('clientName').value,
+                    email: document.getElementById('clientEmail').value,
+                    phone: document.getElementById('clientPhone').value
+                },
+                product: {
+                    id: product.id,
+                    name: `${product.brand} - ${product.name}`,
+                    price: product.price
+                },
+                quantity: parseInt(document.getElementById('quantity').value),
+                total: parseFloat(document.getElementById('totalPrice').value),
+                status: document.getElementById('saleStatus').value,
+                notes: document.getElementById('saleNotes').value
+            };
+            
+            sales.push(sale);
+            alert('✅ Venta registrada exitosamente!\n\nCliente: ' + sale.client.name + '\nProducto: ' + sale.product.name + '\nTotal:  + sale.total.toFixed(2));
+            this.reset();
+            showSection('ventas');
+        });
+
+        function renderSales() {
+            const tbody = document.getElementById('salesTableBody');
+            const filteredSales = getFilteredSales();
+            
+            if (filteredSales.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-secondary-light);">📋 No hay ventas registradas</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filteredSales.map(sale => `
+                <tr>
+                    <td><strong>#${sale.id}</strong></td>
+                    <td>${new Date(sale.date).toLocaleDateString('es-ES')}</td>
+                    <td>${sale.client.name}</td>
+                    <td>${sale.product.name}</td>
+                    <td>${sale.quantity}</td>
+                    <td><strong style="color: var(--primary);">${sale.total.toFixed(2)}</strong></td>
+                    <td><span class="status-badge status-${sale.status}">${sale.status.toUpperCase()}</span></td>
+                    <td><button class="delete-btn" onclick="deleteSale(${sale.id})">🗑️ Eliminar</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function getFilteredSales() {
+            let filtered = sales;
+            
+            const statusFilter = document.getElementById('filterStatus').value;
+            if (statusFilter !== 'todos') {
+                filtered = filtered.filter(s => s.status === statusFilter);
+            }
+            
+            const searchTerm = document.getElementById('searchSales').value.toLowerCase();
+            if (searchTerm) {
+                filtered = filtered.filter(s => 
+                    s.client.name.toLowerCase().includes(searchTerm) ||
+                    s.product.name.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            return filtered;
+        }
+
+        function filterSales() {
+            renderSales();
+            updateStats();
+        }
+
+        function deleteSale(saleId) {
+            if (confirm('¿Estás seguro de eliminar esta venta?')) {
+                sales = sales.filter(s => s.id !== saleId);
+                renderSales();
+                updateStats();
+                alert('✅ Venta eliminada exitosamente');
+            }
+        }
+
+        function updateStats() {
+            const today = new Date().toDateString();
+            const salesToday = sales.filter(s => new Date(s.date).toDateString() === today);
+            const completedSales = sales.filter(s => s.status === 'completado');
+            
+            const totalIngresos = completedSales.reduce((sum, s) => sum + s.total, 0);
+            const promedioVenta = completedSales.length > 0 ? totalIngresos / completedSales.length : 0;
+            
+            document.getElementById('totalVentas').textContent = sales.length;
+            document.getElementById('totalIngresos').textContent = ' + totalIngresos.toFixed(2);
+            document.getElementById('ventasHoy').textContent = salesToday.length;
+            document.getElementById('promedioVenta').textContent = ' + promedioVenta.toFixed(2);
+        }
+
+        // Inicialización
+        renderProducts();
+        populateProductSelect();
+        renderSales();
+        updateStats();
+    </script>
+</body>
+</html>
